@@ -24,3 +24,7 @@ services:
     envVars:
       - key: REACT_APP_API_URL
         value: https://happykids-backend-0rb0.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
