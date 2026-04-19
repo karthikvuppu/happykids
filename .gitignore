@@ -1,0 +1,23 @@
+# Root .gitignore
+.DS_Store
+*.log
+.env
+__pycache__
+node_modules
+dist
+build
+.vscode
+.idea
+*.swp
+*.swo
+*.db
+*.tar.gz
+.terraform/
+terraform.tfstate*
+terraform.tfvars
+tfplan
+.claude/
+aws-deployment/
+buildspec-*.yml
+build-images.py
+.github/
