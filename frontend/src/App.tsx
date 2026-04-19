@@ -9,10 +9,14 @@ import Patients from './pages/Patients';
 import Consultation from './pages/Consultation';
 import ChangePassword from './pages/ChangePassword';
 import Growth from './pages/Growth';
+import Pharmacy from './pages/Pharmacy';
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isLoggedIn = !!localStorage.getItem('access_token');
+  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
+  if (isAuthPage) return null;
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -31,6 +35,7 @@ const NavBar: React.FC = () => {
             <Button color="inherit" onClick={() => navigate('/patients')}>Enrollment</Button>
             <Button color="inherit" onClick={() => navigate('/consultation')}>Consultation</Button>
             <Button color="inherit" onClick={() => navigate('/growth')}>Growth Charts</Button>
+            <Button color="inherit" onClick={() => navigate('/pharmacy')}>Pharmacy</Button>
             <Button color="inherit" onClick={() => navigate('/change-password')}>Change Password</Button>
             <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
@@ -57,6 +62,7 @@ function AppRoutes() {
         <Route path="/consultation" element={<PrivateRoute element={<Consultation />} />} />
         <Route path="/change-password" element={<PrivateRoute element={<ChangePassword />} />} />
         <Route path="/growth" element={<PrivateRoute element={<Growth />} />} />
+        <Route path="/pharmacy" element={<PrivateRoute element={<Pharmacy />} />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </>
