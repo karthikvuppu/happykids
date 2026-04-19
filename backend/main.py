@@ -2,7 +2,7 @@ import logging
 import traceback
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
@@ -56,13 +56,9 @@ def health_check():
     """Health check"""
     return {"status": "healthy"}
 
-@app.get("/app")
-def serve_frontend():
-    """Serve the frontend HTML"""
-    import os
-    html_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "test-frontend.html")
-    return FileResponse(html_path, media_type="text/html")
 
 if __name__ == "__main__":
+    import os
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

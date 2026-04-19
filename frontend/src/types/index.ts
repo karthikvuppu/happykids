@@ -10,13 +10,17 @@ export interface User {
 export interface Patient {
   id: number;
   first_name: string;
-  last_name: string;
-  email: string;
+  last_name?: string;
+  email?: string;
   phone: string;
-  gender: string;
-  date_of_birth: string;
-  address: string;
-  emergency_contact: string;
+  gender?: string;
+  date_of_birth?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  emergency_contact?: string;
+  emergency_phone?: string;
   medical_history?: string;
   allergies?: string;
 }

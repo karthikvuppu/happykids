@@ -1,23 +1,27 @@
 from pydantic_settings import BaseSettings
-from typing import Optional
+from typing import List
 
 class Settings(BaseSettings):
-    """Application settings"""
-    # Database
+    # Database — set DATABASE_URL env var on Render to the PostgreSQL connection string
     DATABASE_URL: str = "sqlite:///./happykids.db"
-    
+
     # API
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "Hospital In-Patient Management System"
-    
-    # Security
-    SECRET_KEY: str = "your-secret-key-change-in-production"
+
+    # Security — always set SECRET_KEY via env var in production
+    SECRET_KEY: str = "change-this-secret-key-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    
-    # CORS
-    BACKEND_CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:8080", "*"]
-    
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+    # CORS — set FRONTEND_URL env var to your Render frontend URL
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    @property
+    def BACKEND_CORS_ORIGINS(self) -> List[str]:
+        origins = [self.FRONTEND_URL, "http://localhost:3000", "http://localhost:8080"]
+        return list(set(origins))
+
     class Config:
         env_file = ".env"
 

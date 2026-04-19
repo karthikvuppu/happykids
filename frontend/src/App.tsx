@@ -1,16 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Patients from './pages/Patients';
-import Admissions from './pages/Admissions';
-import Rooms from './pages/Rooms';
+import Consultation from './pages/Consultation';
+import ChangePassword from './pages/ChangePassword';
+import Growth from './pages/Growth';
 
-const AppBar_Component: React.FC<{ userLoggedIn: boolean }> = ({ userLoggedIn }) => {
+const NavBar: React.FC = () => {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('access_token');
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -20,26 +22,17 @@ const AppBar_Component: React.FC<{ userLoggedIn: boolean }> = ({ userLoggedIn })
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Hospital Management System
+        <Typography variant="h6" sx={{ flexGrow: 1, cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
+          HappyKids Hospital
         </Typography>
-        {userLoggedIn && (
+        {isLoggedIn && (
           <>
-            <Button color="inherit" onClick={() => navigate('/dashboard')}>
-              Dashboard
-            </Button>
-            <Button color="inherit" onClick={() => navigate('/patients')}>
-              Patients
-            </Button>
-            <Button color="inherit" onClick={() => navigate('/admissions')}>
-              Admissions
-            </Button>
-            <Button color="inherit" onClick={() => navigate('/rooms')}>
-              Rooms
-            </Button>
-            <Button color="inherit" onClick={handleLogout}>
-              Logout
-            </Button>
+            <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+            <Button color="inherit" onClick={() => navigate('/patients')}>Enrollment</Button>
+            <Button color="inherit" onClick={() => navigate('/consultation')}>Consultation</Button>
+            <Button color="inherit" onClick={() => navigate('/growth')}>Growth Charts</Button>
+            <Button color="inherit" onClick={() => navigate('/change-password')}>Change Password</Button>
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
         )}
       </Toolbar>
@@ -47,32 +40,33 @@ const AppBar_Component: React.FC<{ userLoggedIn: boolean }> = ({ userLoggedIn })
   );
 };
 
-function App() {
-  const userLoggedIn = !!localStorage.getItem('access_token');
+const PrivateRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
+  return !!localStorage.getItem('access_token') ? element : <Navigate to="/login" replace />;
+};
 
+function AppRoutes() {
+  useLocation();
   return (
-    <BrowserRouter>
-      <AppBar_Component userLoggedIn={userLoggedIn} />
+    <>
+      <NavBar />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={userLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/patients"
-          element={userLoggedIn ? <Patients /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admissions"
-          element={userLoggedIn ? <Admissions /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/rooms"
-          element={userLoggedIn ? <Rooms /> : <Navigate to="/login" />}
-        />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+        <Route path="/patients" element={<PrivateRoute element={<Patients />} />} />
+        <Route path="/consultation" element={<PrivateRoute element={<Consultation />} />} />
+        <Route path="/change-password" element={<PrivateRoute element={<ChangePassword />} />} />
+        <Route path="/growth" element={<PrivateRoute element={<Growth />} />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

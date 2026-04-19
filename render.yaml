@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: happykids-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://happykids-frontend.onrender.com
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  - type: web
+    name: happykids-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://happykids-backend.onrender.com
