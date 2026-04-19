@@ -3,7 +3,7 @@ import {
   Container, Box, Paper, Typography, TextField, Button, Alert,
   Grid, Tab, Tabs, Table, TableBody, TableCell, TableHead, TableRow,
   Chip, Dialog, DialogTitle, DialogContent, DialogActions,
-  Select, MenuItem, FormControl, InputLabel, IconButton, Tooltip,
+  Select, MenuItem, FormControl, InputLabel,
   Divider, Badge, LinearProgress
 } from '@mui/material'
 import * as XLSX from 'xlsx'
@@ -127,7 +127,7 @@ const Pharmacy: React.FC = () => {
 
   // Bill print
   const [printRx, setPrintRx] = useState<Prescription | null>(null)
-  const [printDialog, setPrintDialog] = useState(false)
+  const [, setPrintDialog] = useState(false)
 
   // Bill filters
   const [billFilter, setBillFilter] = useState<'today'|'week'|'month'|'all'>('all')

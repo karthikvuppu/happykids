@@ -76,7 +76,7 @@ const Patients: React.FC = () => {
   const [viewForm, setViewForm] = useState<Record<string, string>>({});
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { loadPatients(); }, []);
+  useEffect(() => { loadPatients(); }, [loadPatients]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
